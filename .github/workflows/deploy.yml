@@ -1,36 +1,32 @@
-name: CI/CD for LibraryManagementSystem
+name: Deploy to IIS
 
 on:
   push:
     branches:
-      - main   # Run when you push to main
+      - main
 
 jobs:
   build-and-deploy:
-    runs-on: self-hosted   # use your local self-hosted runner
+    runs-on: self-hosted  # Make sure your runner is installed on the IIS server
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '8.0.x'   # adjust to your .NET version
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Restore Dependencies
+        run: dotnet restore
 
-    - name: Build project
-      run: dotnet build --configuration Release
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
 
-    - name: Publish project
-      run: dotnet publish -c Release -o ./publish
+      - name: Publish
+        run: dotnet publish -c Release -o ./publish
 
-    - name: Deploy to IIS folder
-      shell: powershell
-      run: |
-        Write-Output "Deploying to IIS..."
-        Remove-Item -Recurse -Force "C:\inetpub\wwwroot\LibraryManagementSystem\*" -ErrorAction SilentlyContinue
-        Copy-Item -Path publish\* -Destination "C:\inetpub\wwwroot\LibraryManagementSystem" -Recurse
-        iisreset
+      - name: Deploy to IIS
+        run: |
+          xcopy /E /Y /I ./publish "C:\inetpub\wwwroot\LibraryManagementSystem"

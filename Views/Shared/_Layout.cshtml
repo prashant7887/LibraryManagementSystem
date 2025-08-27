@@ -1,0 +1,278 @@
+﻿@{
+    ViewData["Title"] = "Library Management System";
+}
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor _httpContextAccessor;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" asp-append-version="true" />
+    <script src="~/css/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <link rel="stylesheet" href="~/css/index.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/Card.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/all.min.css" asp-append-version="true">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" asp-append-version="true"></script>
+    <script src="~/js/jquery-3.7.1.js" asp-append-version="true"></script>
+    <script src="~/Toastr/SweetAlert.js" asp-append-version="true"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/css/loader.css" asp-append-version="true">
+    <title>@ViewData["Title"]</title>
+    <style>
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9); /* semi-transparent background */
+            display: none; /* hidden by default */
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loader-img {
+            width: 100px;
+            height: 100px;
+        }
+
+        body {
+            padding-top: 70px;
+        }
+
+        .navbar .dropdown-submenu .dropdown-item:hover {
+            color: black !important;
+        }
+
+        .navbar .dropdown-menu .dropdown-item:hover {
+            color: black !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loaderOverlay" class="overlay">
+        <img class="loader-img" src="https://cdn.pixabay.com/animation/2023/11/30/10/11/10-11-02-622_512.gif" alt="Loading..." />
+    </div>
+    <div class="container-fluid wrapper">
+        <!-- start header here -->
+        <div class="row">
+            <div class="col-sm-12 col-md-12 m-0 p-0">
+                <nav class="navbar navbar-expand-lg fixed-top" style="background-color: #003366;font-size:15px">
+                    <div class="container-fluid">
+                        <a class="navbar-brand text-white" href="#">@_httpContextAccessor.HttpContext.Session.GetString("compname")</a>
+                        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar"
+                                aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                             aria-labelledby="offcanvasNavbarLabel">
+                            <div class="offcanvas-header">
+                                <h5 class="offcanvas-title text-white" id="offcanvasNavbarLabel">Offcanvas</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link active text-white" aria-current="page" href=""
+                                           id="Home">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active text-white" aria-current="page" href=""
+                                           id="Dashboard">Dashboard</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="#" id="Registration">Registration</a>
+                                    </li>
+                                    <li class="nav-item dropdown openmenu">
+                                        <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                                           data-bs-toggle="dropdown" aria-expanded="false">
+                                            Manage Students
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end" style="background-color: #003366;">
+                                            <li>
+                                                <a class="dropdown-item text-white" href="#" id="StudentList">
+                                                    Student
+                                                    Records
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a class="dropdown-item text-white" href="#" id="IssueCard">
+                                                    Issue
+                                                    Card
+                                                </a>
+                                            </li>
+                                            <li><a class="dropdown-item text-white" href="#">Renew Card</a></li>
+                                            <li><a class="dropdown-item text-white" href="#">Bulk Card Printing</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="#" id="Registration">Quick Manager</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="#" id="Registration">Seat Allocation</a>
+                                    </li>
+                                    <li class="nav-item dropdown openmenu">
+                                        <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                                           data-bs-toggle="dropdown" aria-expanded="false">
+                                            Masters Hub
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end" style="background-color: #003366;">
+                                            <!-- Student Masters with Submenu -->
+                                            <li class="dropdown-submenu">
+                                                <a class="dropdown-item dropdown-toggle text-white" href="#">
+                                                    Student
+                                                    Masters
+                                                </a>
+                                                <ul class="dropdown-menu" style="background-color: #003366;">
+                                                    <li>
+                                                        <a class="dropdown-item text-white" id="Hour" asp-action="HourMaster" asp-controller="Master">Hour Master</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-white" id="Course" asp-action="CourseMaster" asp-controller="Master">
+                                                            Course
+                                                            Master
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-white" asp-action="MembershipMaster" asp-controller="Master">
+                                                            MemberShip Type
+                                                            Master
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-white" id="CardType" href="#">
+                                                            Card Type
+                                                            Master
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-white" id="Shift" href="#">
+                                                            Shift
+                                                            Master
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-white" id="CardDuration" href="#">
+                                                            Card Duration Master
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-white" id="Rate" href="#">
+                                                            Pricing
+                                                            Master
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-white" id="Gst"
+                                                           href="#">Gst Master</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-white" id="CardNumber"
+                                                           href="#">Card Number Master</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-white" id="Discount"
+                                                           href="#">Discounts/Offers Master</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-white" id="CardSetting"
+                                                           href="#">Card Setting</a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-white" href="#">Themes Master</a>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li><a class="dropdown-item text-white" href="#">Space Management</a></li>
+                                            <li><a class="dropdown-item text-white" href="#">Catalog Management</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item dropdown openmenu">
+                                        <a class="nav-link dropdown-toggle text-white" href="#" role="button"
+                                           data-bs-toggle="dropdown" aria-expanded="false">
+                                            Report's and Analytics
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-end" style="background-color: #003366;">
+                                            <li><a class="dropdown-item text-white" href="#">Book List</a></li>
+                                            <li><a class="dropdown-item text-white" href="#">Issued Books</a></li>
+                                            <li><a class="dropdown-item text-white" href="#">New Books</a></li>
+                                            <li><a class="dropdown-item text-white" href="#">Old Books</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="#" id="Registration">Theme Creation</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link text-white" href="#" id="Registration">
+                                            <i class="fa fa-bars text-white btn"
+                                               style="font-weight:bold;font-size: 13px;border:1px solid white"
+                                               data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop"
+                                               aria-controls="offcanvasTop"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+            </div>
+        </div>
+        <!-- close header here -->
+        <!-- main content -->
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                @* <div class="content" id="maincontent"> *@
+                @RenderBody()
+                @* </div> *@
+            </div>
+        </div>
+        <!-- close here main content -->
+        <!-- footer -->
+        <div class="row">
+            <div class="col-sm-12 p-0 m-0">
+                <footer class="footer fixed-bottom">
+                    <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+                </footer>
+            </div>
+        </div>
+
+        <!-- close here footer -->
+        <div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel"
+             style="height:100px">
+            <div class="row">
+                <div class="col-md-2 col-sm-2">
+                    <p class="offcanvas-title mt-2" id="offcanvasTopLabel"
+                       style="font-weight:bold;font-size: 30px;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+                        @_httpContextAccessor.HttpContext.Session.GetString("compname").ToString()
+                    </p>
+                </div>
+                <div class="col-md-3 col-sm-3"><span id="sptimer" class="btn btn-danger mt-3"></span></div>
+                <div class="col-md-3 col-sm-3">
+                    <i class="fa fa-facebook btn btn-danger mt-3 m-2" style="font-size:18px"></i>
+                    <i class="fa fa-envelope btn btn-danger mt-3 m-2" style="font-size:18px"></i>
+                    <i class="fa fa-instagram btn btn-danger mt-3 m-2" style="font-size:18px"></i>
+                    <i class="fa fa-twitter btn btn-danger mt-3 m-2" style="font-size:18px"></i>
+                </div>
+                <div class="col-md-3 col-sm-4" style="text-align: right;">
+                    <span class="btn btn-primary mt-3" id="btnlogout">Logout</span>
+                </div>
+                <div class="col-md-1 col-sm-6">
+                    <button type="button" class="btn-close mx-3 mt-2" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @RenderSection("Scripts", required: false);
+    <script src="~/Toastr/SweetAlert.js" asp-append-version="true"></script>
+</body>
+
+</html>

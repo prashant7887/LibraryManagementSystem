@@ -24,4 +24,14 @@
         public string? curdate { get; set; }
 
     }
+    public class CardType
+    {
+        public int id { get; set; }
+        public string? cardname { get; set; }
+        public string? CardDesc { get; set; }
+        public decimal basePrice { get; set; }
+        public string? Action { get; set; }
+        public string? curdate { get; set; }
+
+    }
 }

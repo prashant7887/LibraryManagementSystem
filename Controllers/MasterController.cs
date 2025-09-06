@@ -116,5 +116,30 @@ namespace LibraryManagementSystem.Controllers
             var res = await _master.getMembershipDetails();
             return Ok(new { message = res });
         }
+        [HttpPost]
+        public async Task<IActionResult> deleteMembership(int id)
+        {
+            var res = await _master.DeleteMembership(id);
+            return Ok(new { message = res });
+        }
+        [HttpGet]
+        public IActionResult CardTypeMaster()
+        {
+            if (HttpContext.Session == null)
+            {
+                RedirectToAction("login", "Account");
+            }
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> getCardTypeDetails()
+        {
+            if (HttpContext.Session == null)
+            {
+                RedirectToAction("login", "Account");
+            }
+            var res = await _master.getCardTypesDetails();
+            return Ok(new { message = res });
+        }
     }
 }

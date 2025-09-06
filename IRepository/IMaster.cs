@@ -12,6 +12,9 @@ namespace LibraryManagementSystem.IRepository
         public Task<string> DeleteCourse(int id);
         public Task<string> saveMembership(Membership mm);
         public Task<List<Membership>> getMembershipDetails();
+        public Task<string> DeleteMembership(int id);
+        public Task<List<CardType>> getCardTypesDetails();
 
     }
 }
+

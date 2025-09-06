@@ -32,7 +32,8 @@
             else if (res.split(':')[0] == "402") {
                 showAlert("warning", res.split(':')[1]);
             }
-            else {fsda
+            else {
+                fsda
                 showAlert("error", res.split(':')[1]);
             }
             hideLoader();
@@ -46,24 +47,25 @@ async function bindMembership() {
     try {
         showLoader();
         const response = await $.ajax({
-            url: "/Master/getMembershipTypes",
+            url: "/Master/getCardTypeDetails",
             method: "GET",
             data: "",
             contentType: "application/json",
         });
-        $("#tblmember tbody tr").remove();
+        $("#tblcardtype tbody tr").remove();
         let res = response.message;
         if (res.length > 0) {
             res.forEach(function (item, index) {
                 let button = `<i id="edit_${index}" class="btn btn-warning fa fa-edit" onclick="editRecord(${item.id},this.id)"></i>
                               <i id="delete_${index}" class="btn btn-danger fa fa-trash" onclick="deleteRecord(${item.id},this.id)"></i>
                              `
-                $("#tblmember tbody").append(`
+                $("#tblcardtype tbody").append(`
                     <tr>
                     <td>${(index + 1)}</td>
-                    <td id="mtype${index}">${item.membership}</td>
-                    <td id="desc${index}">${item.description}</td>
-                    <td id="curdt${index}">${item.curdate}</td>
+                    <td id="mtype${index}">${item.cardname}</td>
+                    <td id="desc${index}">${item.CardDesc}</td>
+                    <td id="curdt${index}">${item.basePrice}</td>
+                    <td id="status${index}">${item.curdate}</td>
                     <td id="status${index}">${item.action}</td>
                     <td class="d-flex inline-item-center gap-2">${button}</td>
                     </tr>
@@ -71,9 +73,9 @@ async function bindMembership() {
             });
         }
         else {
-            $("#tblmember tbody").append(`
+            $("#tblcardtype tbody").append(`
                     <tr>
-                      <td class="text-center" colspan="6"> -- No Record Found -- </td>
+                      <td class="text-center" colspan="7"> -- No Record Found -- </td>
                     </tr>
                  `);
         }

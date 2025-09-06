@@ -289,5 +289,72 @@ namespace LibraryManagementSystem.Repository
             }
             return Memberships;
         }
+        public async Task<string> DeleteMembership(int id)
+        {
+            string msg = string.Empty;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    if (con.State == ConnectionState.Closed)
+                        await con.OpenAsync();
+
+                    SqlCommand cmd = new SqlCommand("Sp_Student", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@id", id);
+                    cmd.Parameters.AddWithValue("@action", "DeleteMembership");
+                    cmd.Parameters.AddWithValue("@compid", _compid);
+                    SqlDataReader read = await cmd.ExecuteReaderAsync();
+                    if (await read.ReadAsync())
+                    {
+                        msg = read["msg"].ToString() ?? "";
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return msg;
+        }
+        public async Task<List<CardType>> getCardTypesDetails()
+        {
+            List<CardType> CardType = new List<CardType>();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    if (con.State == ConnectionState.Closed)
+                        await con.OpenAsync();
+                    SqlCommand cmd = new SqlCommand("Sp_Student", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@action", "getCardType");
+                    cmd.Parameters.AddWithValue("@compid", _compid);
+                    SqlDataReader dr = await cmd.ExecuteReaderAsync();
+                    while (await dr.ReadAsync())
+                    {
+                        var newdata = new CardType()
+                        {
+                            id = dr.GetInt32(0),
+                            cardname = dr.GetString(1),
+                            CardDesc = dr.GetString(2),
+                            basePrice = decimal.Parse(dr.GetString(3)),
+                            curdate = dr.GetString(4),
+                            Action = dr.GetString(5)
+                        };
+                        CardType.Add(newdata);
+                    }
+                    if (dr != null)
+                    {
+                        await dr.CloseAsync();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return CardType;
+        }
     }
 }

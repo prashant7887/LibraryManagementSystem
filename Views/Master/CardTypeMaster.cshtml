@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "MembershipMaster";
+﻿
+@{
+    ViewData["Title"] = "CardTypeMaster";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
@@ -21,10 +22,7 @@
 </style>
 <div class="row mt-1 m-0 p-0">
     <div class="col-sm-6 col-md-12 header">
-        <!-- Page Title -->
-        <h5 class="mt-1"><i class="fa fa-user-plus"></i> Create Membership Type</h5>
-
-        <!-- Action Buttons -->
+        <h5 class="mt-1"><i class="fa fa-address-book-o"></i> CardType Master</h5>
         <div>
             <button class="btn btn-success me-2">
                 <i class="fa fa-file-excel"></i> Download Excel
@@ -39,40 +37,48 @@
     <div class="maincontainer">
         <div class="row">
             <div class="col-md-3 col-sm-6">
-                <label for="membership" class="form-label">Membership <span style="color:red">*</span></label>
-                <input type="text" class="form-control" id="membership" placeholder="Enter Membership Type" />
+                <label for="cardname" class="form-label">Card Type <span style="color:red">*</span></label>
+                <input type="text" class="form-control" id="cardname" name="cardname" placeholder="Enter Card Type" />
             </div>
             <div class="col-md-3 col-sm-6">
-                <label for="description" class="form-label">Description <span style="color:red">*</span></label>
-                <input type="text" class="form-control" id="description" placeholder="Enter Description"/>
+                <label for="CardDesc" class="form-label">Description <span style="color:red">*</span></label>
+                <input type="text" class="form-control" id="CardDesc" name="CardDesc" placeholder="Enter Description"/>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <label for="basePrice" class="form-label">Base Price <span style="color:red">*</span></label>
+                <input type="number" class="form-control" id="basePrice" name="basePrice" placeholder="Enter base price" />
             </div>
             <div class="col-md-3 col-sm-6">
                 <label class="form-label">Action <span style="color:red">*</span></label>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="action" id="action" value="Active" checked />
-                    <label class="form-check-label" for="active">Active</label>
+                    <input class="form-check-input" type="radio" name="action" id="act1" value="Active" checked/>
+                    <label class="form-check-label" for="act1">Active</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="action" id="action1" value="InActive"/>
-                    <label class="form-check-label" for="active1">In Active</label>
+                    <input class="form-check-input" type="radio" name="action" id="act2" value="InActive"/>
+                    <label class="form-check-label" for="act2">In Active</label>
                 </div>
             </div>
-            <div class="col-md-3 col-sm-6 mt-3">
+
+        </div>
+        <div>
+            <div class="col-md-12 col-sm-6 mt-3 text-center">
                 <span class="btn btn-success text-white mt-4" id="btnsave" style="cursor:pointer;"><i class="fa fa-save"></i> Save</span>
                 <span class="btn btn-primary mt-4" id="btnreset" style="cursor: pointer;"><i class="fa fa-sync"></i> Reset</span>
-                <input type="hidden" value="0" id="hid"/>
+                <input type="hidden" value="0" id="hid" />
             </div>
         </div>
     </div>
-    <div class="maincontainer">
+    <div class="maincontainer table-responsive" style="height:400px">
         <div class="row">
-            <div class="col-md-12 table-responsive" style="height:400px">
-                <table class="table table-bordered table-hover tblcss" id="tblmember">
-                    <thead style="background-color: #003366;color:white;position:sticky;top:-1px">
+            <div class="col-md-12">
+                <table class="table table-bordered table-striped tblcss" id="tblcardtype">
+                    <thead style="background-color: #003366;color:white">
                         <tr>
                             <th>Sr.No.</th>
-                            <th>Membership Type</th>
+                            <th>Card Type</th>
                             <th>Description</th>
+                            <th>Base Price</th>
                             <th>Created Date</th>
                             <th>Status</th>
                             <th>Actions</th>
@@ -88,5 +94,5 @@
 @section Scripts {
     <script src="~/CustomeJs/CommonCollections.js" asp-append-version="true"></script>
     <script src="~/CustomeJs/commonBindDetails.js" asp-append-version="true"></script>
-    <script src="~/Master/membershipMaster.js" asp-append-version="true"></script>
+    <script src="~/Master/CardType.js" asp-append-version="true"></script>
 }
